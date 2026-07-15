@@ -1,0 +1,235 @@
+{{!-- The Megastructure character sheet. No outer <form>: DocumentSheetV2 owns it. --}}
+<div class="mega-sheet">
+
+  {{!-- Masthead: identity + vitals --}}
+  <header class="mega-masthead">
+    <div class="mega-name">
+      <input type="text" name="name" value="{{actor.name}}" placeholder="Character Name" class="mega-name-input" />
+      <label class="mega-npc"><input type="checkbox" name="system.isNPC" {{checked system.isNPC}} /> {{localize "MEGA.Sheet.NPC"}}</label>
+    </div>
+    <div class="mega-vitals">
+      <label>{{localize "MEGA.Sheet.Species"}}<input type="text" name="system.species" value="{{system.species}}" /></label>
+      <label>{{localize "MEGA.Sheet.Size"}}
+        <select name="system.size">
+          {{#each sizes as |s|}}<option value="{{s}}" {{#if (eq ../system.size s)}}selected{{/if}}>{{s}}</option>{{/each}}
+        </select>
+      </label>
+      <label>{{localize "MEGA.Sheet.Movement"}}<input type="number" name="system.movement" value="{{system.movement}}" /></label>
+      <label>{{localize "MEGA.Sheet.Initiative"}}<input type="number" name="system.initiative" value="{{system.initiative}}" /></label>
+      <label>{{localize "MEGA.Sheet.Slots"}}<input type="number" name="system.slots" value="{{system.slots}}" /></label>
+      <label class="mega-species-pick">Auto-fill species
+        <span class="row">
+          <select data-species-pick>
+            <option value="">Choose...</option>
+            {{#each speciesList as |s|}}<option value="{{s.key}}">{{s.label}}</option>{{/each}}
+          </select>
+          <button type="button" class="mega-btn ghost" data-action="applySpecies">Apply</button>
+        </span>
+      </label>
+    </div>
+    <div class="mega-resources">
+      <label>{{localize "MEGA.Resource.Food"}}<input type="number" name="system.resources.food" value="{{system.resources.food}}" /></label>
+      <label>{{localize "MEGA.Resource.Water"}}<input type="number" name="system.resources.water" value="{{system.resources.water}}" /></label>
+      <label>{{localize "MEGA.Resource.Air"}}<input type="number" name="system.resources.air" value="{{system.resources.air}}" /></label>
+      <label>{{localize "MEGA.Resource.Energy"}}<input type="number" name="system.resources.energy" value="{{system.resources.energy}}" /></label>
+    </div>
+  </header>
+
+  {{!-- Survival: intake, deprivation, carry --}}
+  <section class="mega-section">
+    <div class="mega-section-head">
+      <h2>Survival{{#if penalty}} <span class="mega-pen">{{penalty}} to all rolls</span>{{/if}}{{#if system.emergencySleep.active}} <span class="mega-sleep">Emergency Sleep &middot; {{system.emergencySleep.cyclesLeft}} Cycle(s)</span>{{/if}}</h2>
+      <button type="button" class="mega-btn" data-action="advanceCycle"><i class="fas fa-hourglass-half"></i> Advance Cycle</button>
+    </div>
+    <div class="mega-surv">
+      <div class="mega-panel">
+        <h3>Per-Cycle Intake</h3>
+        <div class="mega-quad">
+          <label>{{localize "MEGA.Resource.Food"}}<input type="number" name="system.intake.food" value="{{system.intake.food}}" /></label>
+          <label>{{localize "MEGA.Resource.Water"}}<input type="number" name="system.intake.water" value="{{system.intake.water}}" /></label>
+          <label>{{localize "MEGA.Resource.Energy"}}<input type="number" name="system.intake.energy" value="{{system.intake.energy}}" /></label>
+          <label>{{localize "MEGA.Resource.Air"}}<input type="number" name="system.intake.air" value="{{system.intake.air}}" /></label>
+        </div>
+      </div>
+      <div class="mega-panel">
+        <h3>Deprivation Tiers</h3>
+        <div class="mega-quad">
+          <label>Starv. tier<input type="number" name="system.deprivation.starvation.tier" value="{{system.deprivation.starvation.tier}}" min="1" max="6" /></label>
+          <label>Starv. tally<input type="number" name="system.deprivation.starvation.tallies" value="{{system.deprivation.starvation.tallies}}" min="0" max="2" /></label>
+          <label>Dehyd. tier<input type="number" name="system.deprivation.dehydration.tier" value="{{system.deprivation.dehydration.tier}}" min="1" max="6" /></label>
+          <label>Exhaust. tier<input type="number" name="system.deprivation.exhaustion.tier" value="{{system.deprivation.exhaustion.tier}}" min="1" max="6" /></label>
+        </div>
+      </div>
+      <div class="mega-panel">
+        <h3>Carry</h3>
+        <div class="mega-carry {{#if carry.over}}over{{/if}}">
+          <span class="mega-carry-num">{{carry.used}} / {{carry.capacity}} slots</span>
+          {{#if carry.over}}<span class="mega-carry-warn">Over by {{carry.over}} &middot; {{carry.over}} Exhaustion</span>{{/if}}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{!-- Limbs: each row rolls its own Skill --}}
+  <section class="mega-section">
+    <div class="mega-section-head">
+      <h2>{{localize "MEGA.Sheet.Limbs"}}</h2>
+      <div class="mega-tools">
+        <span class="mega-tools-label">{{localize "MEGA.Preset.Apply"}}:</span>
+        {{#each presets as |p|}}
+          <button type="button" class="mega-btn ghost" data-action="applyPreset" data-preset="{{p}}">{{localize (concat "MEGA.Preset." p)}}</button>
+        {{/each}}
+        <button type="button" class="mega-btn" data-action="addLimb"><i class="fas fa-plus"></i> {{localize "MEGA.Limb.Add"}}</button>
+      </div>
+    </div>
+
+    <table class="mega-limbs">
+      <thead>
+        <tr>
+          <th class="l-name">{{localize "MEGA.Limb.Label"}}</th>
+          <th title="To-Hit Target">TH</th>
+          <th title="Hit Points">HP</th>
+          <th title="Death Value">Death</th>
+          <th title="Defense">Def</th>
+          <th title="Skill Points">Pts</th>
+          <th title="Species Bonus">Spc</th>
+          <th title="Skill Total (Points + Species Bonus)">Total</th>
+          <th class="l-roll"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each limbs as |limb|}}
+        <tr data-limb-key="{{limb.key}}">
+          <td class="l-name">
+            <input type="hidden" name="system.limbs.{{limb.key}}.order" value="{{limb.order}}" />
+            <input type="text" name="system.limbs.{{limb.key}}.label" value="{{limb.label}}" />
+          </td>
+          <td class="l-eff">
+            <input type="number" name="system.limbs.{{limb.key}}.toHitTarget" value="{{limb.toHitTarget}}" />
+            {{#if limb.eff.armorToHit}}<span class="eff" title="With armor">{{limb.eff.toHitTarget}}</span>{{/if}}
+          </td>
+          <td class="l-hp">
+            <input type="number" name="system.limbs.{{limb.key}}.hp.value" value="{{limb.hp.value}}" />
+            <span class="sep">/</span>
+            <input type="number" name="system.limbs.{{limb.key}}.hp.max" value="{{limb.hp.max}}" />
+          </td>
+          <td><input type="number" name="system.limbs.{{limb.key}}.deathValue" value="{{limb.deathValue}}" /></td>
+          <td class="l-eff">
+            <input type="number" name="system.limbs.{{limb.key}}.defense" value="{{limb.defense}}" />
+            {{#if limb.eff.armorDef}}<span class="eff" title="With armor">{{limb.eff.defense}}</span>{{/if}}
+          </td>
+          <td><input type="number" name="system.limbs.{{limb.key}}.points" value="{{limb.points}}" /></td>
+          <td><input type="number" name="system.limbs.{{limb.key}}.speciesBonus" value="{{limb.speciesBonus}}" /></td>
+          <td class="l-total">{{signed limb.skillTotal}}</td>
+          <td class="l-roll">
+            <button type="button" class="mega-btn roll" data-action="rollSkill" data-limb="{{limb.key}}" title="{{localize 'MEGA.Limb.Roll'}}"><i class="fas fa-dice-d10"></i></button>
+            <button type="button" class="mega-btn icon danger" data-action="deleteLimb" title="{{localize 'MEGA.Limb.Delete'}}"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </section>
+
+  {{!-- Attacks: equipped weapons --}}
+  <section class="mega-section">
+    <div class="mega-section-head">
+      <h2>{{localize "MEGA.Weapon.Attack"}}s</h2>
+      <div class="mega-actions-tracker" title="2 Actions per turn (rulebook Ch.8); a Ring solve grants +1">
+        <span class="mega-actions-label">Actions</span>
+        <button type="button" class="mega-btn icon" data-action="spendAction" title="Spend an Action"><i class="fas fa-minus"></i></button>
+        <span class="mega-actions-val {{#if (eq system.actions.value 0)}}spent{{/if}}">{{system.actions.value}}</span>
+        <span class="mega-actions-sep">/</span>
+        <span class="mega-actions-max">{{system.actions.max}}</span>
+        <button type="button" class="mega-btn icon" data-action="gainAction" title="Gain an Action (Ring solve)"><i class="fas fa-plus"></i></button>
+        <button type="button" class="mega-btn icon" data-action="resetActions" title="Reset to max (new turn)"><i class="fas fa-rotate-left"></i></button>
+      </div>
+      {{#if system.hacking.inCarapace}}
+        <span class="mega-hack-badge">In Carapace</span>
+        <button type="button" class="mega-btn ghost" data-action="exitCarapace" title="Leave the Carapace">Exit</button>
+      {{else}}
+        <button type="button" class="mega-btn ghost" data-action="enterCarapace" title="Interface roll to enter a Carapace (1 Action)"><i class="fas fa-plug"></i> Hack</button>
+      {{/if}}
+    </div>
+    {{#if equippedWeapons.length}}
+    <table class="mega-attacks">
+      <thead><tr><th>Weapon</th><th>Type</th><th>M</th><th>T</th><th>L</th><th></th></tr></thead>
+      <tbody>
+        {{#each equippedWeapons as |w|}}
+        <tr data-item-id="{{w.id}}">
+          <td>{{w.name}}</td>
+          <td>{{w.system.weaponType}}</td>
+          <td>{{w.system.melee}}</td>
+          <td>{{w.system.thrown}}</td>
+          <td>{{w.system.launched}}</td>
+          <td><button type="button" class="mega-btn roll" data-action="attack" data-item="{{w.id}}"><i class="fas fa-crosshairs"></i> {{localize "MEGA.Weapon.Attack"}}</button></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {{else}}
+    <p class="mega-empty">No equipped weapons. Add one in Inventory and mark it equipped.</p>
+    {{/if}}
+    <p class="mega-hint"><i class="fas fa-circle-info"></i> To attack: <b>target the enemy token</b> (press T over it), then click Attack and choose the target's Limb.</p>
+  </section>
+
+  {{!-- Inventory --}}
+  <section class="mega-section">
+    <div class="mega-section-head"><h2>{{localize "MEGA.Sheet.Inventory"}}</h2></div>
+
+    <div class="mega-inv-head"><h3>Weapons</h3><button type="button" class="mega-btn" data-action="createItem" data-item-type="weapon"><i class="fas fa-plus"></i></button></div>
+    <ul class="mega-list">
+      {{#each weapons as |w|}}
+      <li data-item-id="{{w.id}}">
+        <span class="i-name">{{w.name}}</span>
+        <span class="i-meta">{{w.system.weaponType}} &middot; M{{w.system.melee}}/T{{w.system.thrown}}/L{{w.system.launched}} &middot; T{{w.system.tier}}</span>
+        <span class="i-ctrl">
+          <button type="button" class="mega-btn icon {{#if w.system.equipped}}on{{/if}}" data-action="toggleEquip" title="Equip"><i class="fas fa-shield"></i></button>
+          <button type="button" class="mega-btn icon" data-action="editItem"><i class="fas fa-edit"></i></button>
+          <button type="button" class="mega-btn icon danger" data-action="deleteItem"><i class="fas fa-trash"></i></button>
+        </span>
+      </li>
+      {{/each}}
+    </ul>
+
+    <div class="mega-inv-head"><h3>Armor</h3><button type="button" class="mega-btn" data-action="createItem" data-item-type="armor"><i class="fas fa-plus"></i></button></div>
+    <ul class="mega-list">
+      {{#each armor as |a|}}
+      <li data-item-id="{{a.id}}">
+        <span class="i-name">{{a.name}}</span>
+        <select class="mega-armor-sel" data-armor-limb title="Covered Limb">
+          <option value="">(limb)</option>
+          {{#each ../limbOptions as |lo|}}<option value="{{lo.key}}" {{#if (eq a.system.limb lo.key)}}selected{{/if}}>{{lo.label}}</option>{{/each}}
+        </select>
+        <span class="i-meta">+{{a.system.defenseBonus}} Def / +{{a.system.toHitBonus}} TH &middot; T{{a.system.tier}}</span>
+        <span class="i-ctrl">
+          <button type="button" class="mega-btn icon {{#if a.system.equipped}}on{{/if}}" data-action="toggleEquip" title="Equip"><i class="fas fa-shield"></i></button>
+          <button type="button" class="mega-btn icon" data-action="editItem"><i class="fas fa-edit"></i></button>
+          <button type="button" class="mega-btn icon danger" data-action="deleteItem"><i class="fas fa-trash"></i></button>
+        </span>
+      </li>
+      {{/each}}
+    </ul>
+
+    <div class="mega-inv-head"><h3>Gear</h3><button type="button" class="mega-btn" data-action="createItem" data-item-type="gear"><i class="fas fa-plus"></i></button></div>
+    <ul class="mega-list">
+      {{#each gear as |g|}}
+      <li data-item-id="{{g.id}}">
+        <span class="i-name">{{g.name}}</span>
+        <span class="i-meta">x{{g.system.quantity}} &middot; T{{g.system.tier}}</span>
+        <span class="i-ctrl">
+          <button type="button" class="mega-btn icon" data-action="editItem"><i class="fas fa-edit"></i></button>
+          <button type="button" class="mega-btn icon danger" data-action="deleteItem"><i class="fas fa-trash"></i></button>
+        </span>
+      </li>
+      {{/each}}
+    </ul>
+  </section>
+
+  {{!-- Details --}}
+  <section class="mega-section">
+    <div class="mega-section-head"><h2>{{localize "MEGA.Sheet.Bio"}}</h2></div>
+    <textarea name="system.notes" class="mega-notes" rows="5" placeholder="Background, current effects, deprivation tiers...">{{system.notes}}</textarea>
+  </section>
+
+</div>

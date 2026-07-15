@@ -1,0 +1,61 @@
+{{!-- Generic item sheet: branches on type. No outer <form> (DocumentSheetV2 owns it). --}}
+<div class="mega-sheet item">
+  <header class="mega-item-head">
+    <img class="mega-item-img" src="{{item.img}}" data-edit="img" alt="icon" />
+    <input type="text" name="name" value="{{item.name}}" class="mega-name-input" placeholder="Name" />
+  </header>
+
+  {{#if isWeapon}}
+  <div class="mega-item-body">
+    <label>{{localize "MEGA.Weapon.Type"}}
+      <select name="system.weaponType">
+        {{#each weaponTypes as |t|}}<option value="{{t}}" {{#if (eq ../system.weaponType t)}}selected{{/if}}>{{t}}</option>{{/each}}
+      </select>
+    </label>
+    <div class="mega-grid3">
+      <label>{{localize "MEGA.Weapon.Melee"}}<input type="number" name="system.melee" value="{{system.melee}}" /></label>
+      <label>{{localize "MEGA.Weapon.Thrown"}}<input type="number" name="system.thrown" value="{{system.thrown}}" /></label>
+      <label>{{localize "MEGA.Weapon.Launched"}}<input type="number" name="system.launched" value="{{system.launched}}" /></label>
+    </div>
+    <div class="mega-grid3">
+      <label>{{localize "MEGA.Weapon.Tier"}}<input type="number" name="system.tier" value="{{system.tier}}" /></label>
+      <label>Slots<input type="number" name="system.slots" value="{{system.slots}}" /></label>
+      <label class="mega-check">{{localize "MEGA.Weapon.Equipped"}}<input type="checkbox" name="system.equipped" {{checked system.equipped}} /></label>
+    </div>
+    <label>Properties<input type="text" name="system.properties" value="{{system.properties}}" /></label>
+    <p class="mega-note">The Melee / Thrown / Launched number is both the To-Hit bonus for that mode and the flat damage it deals.</p>
+  </div>
+  {{/if}}
+
+  {{#if isArmor}}
+  <div class="mega-item-body">
+    <label>Limb covered<input type="text" name="system.limb" value="{{system.limb}}" placeholder="e.g. Head, Center Mass" /></label>
+    <div class="mega-grid2">
+      <label>Defense Bonus<input type="number" name="system.defenseBonus" value="{{system.defenseBonus}}" /></label>
+      <label>To-Hit Bonus<input type="number" name="system.toHitBonus" value="{{system.toHitBonus}}" /></label>
+    </div>
+    <div class="mega-grid3">
+      <label>{{localize "MEGA.Weapon.Tier"}}<input type="number" name="system.tier" value="{{system.tier}}" /></label>
+      <label>Slots<input type="number" name="system.slots" value="{{system.slots}}" /></label>
+      <label class="mega-check">{{localize "MEGA.Weapon.Equipped"}}<input type="checkbox" name="system.equipped" {{checked system.equipped}} /></label>
+    </div>
+    <label>Properties<input type="text" name="system.properties" value="{{system.properties}}" /></label>
+    <p class="mega-note">When equipped with its Limb set, this armor's Defense and To-Hit bonuses apply to that Limb automatically. Choose the Limb from the dropdown on the character sheet (or type its name above).</p>
+  </div>
+  {{/if}}
+
+  {{#if isGear}}
+  <div class="mega-item-body">
+    <div class="mega-grid2">
+      <label>Quantity<input type="number" name="system.quantity" value="{{system.quantity}}" /></label>
+      <label>{{localize "MEGA.Weapon.Tier"}}<input type="number" name="system.tier" value="{{system.tier}}" /></label>
+    </div>
+    <div class="mega-grid2">
+      <label>Slots (cost)<input type="number" name="system.slots" value="{{system.slots}}" /></label>
+      <label>Slot Bonus (packs)<input type="number" name="system.slotBonus" value="{{system.slotBonus}}" /></label>
+    </div>
+    <label>Properties<input type="text" name="system.properties" value="{{system.properties}}" /></label>
+    <p class="mega-note">A pack (Backpack, Satchel, Sack) usually costs 1 slot and adds capacity via Slot Bonus.</p>
+  </div>
+  {{/if}}
+</div>

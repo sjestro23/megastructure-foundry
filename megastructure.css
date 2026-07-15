@@ -1,0 +1,166 @@
+/* The Megastructure - sheet styling. Black / white / grey, serif logotype accents,
+   to echo the printed rulebook. Scoped under .megastructure so it never bleeds. */
+
+.megastructure .mega-sheet {
+  --ink: #16181b;
+  --paper: #ffffff;
+  --line: #c7c5be;
+  --muted: #8a867e;
+  --shade: #f4f2ee;
+  --ok: #1f7a45;
+  --bad: #9c2b2b;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+  padding: 8px 10px 12px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.megastructure h2 {
+  font-family: "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 14px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  border-bottom: 1.5px solid var(--ink); margin: 0 0 6px; padding-bottom: 3px;
+}
+.megastructure h3 { font-size: 12px; margin: 4px 0; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+
+.megastructure input, .megastructure select, .megastructure textarea {
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 3px; padding: 2px 4px; font-size: 12px;
+}
+.megastructure input[type="number"] { width: 46px; text-align: center; }
+
+/* Masthead */
+.mega-masthead { border-bottom: 2px solid var(--ink); padding-bottom: 8px; margin-bottom: 10px; }
+.mega-name { display: flex; align-items: center; gap: 10px; }
+.mega-name-input { flex: 1; font-family: "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 20px; font-weight: 700; border: none; border-bottom: 1px solid var(--line); border-radius: 0; }
+.mega-npc { white-space: nowrap; font-size: 11px; color: var(--muted); }
+.mega-vitals, .mega-resources { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.mega-vitals label, .mega-resources label {
+  display: flex; flex-direction: column; font-size: 9px; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--muted); gap: 2px;
+}
+.mega-resources { padding-top: 6px; border-top: 1px dashed var(--line); }
+
+/* Sections */
+.mega-section { margin-bottom: 12px; }
+.mega-section-head { display: flex; align-items: center; justify-content: space-between; }
+.mega-tools { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.mega-tools-label { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+
+/* Buttons */
+.mega-btn {
+  display: inline-flex; align-items: center; gap: 4px; cursor: pointer;
+  background: var(--ink); color: #fff; border: 1px solid var(--ink); border-radius: 3px;
+  padding: 2px 8px; font-size: 11px; line-height: 1.4; width: auto;
+}
+.mega-btn:hover { background: #33373d; }
+.mega-btn.ghost { background: transparent; color: var(--ink); }
+.mega-btn.ghost:hover { background: var(--shade); }
+.mega-btn.icon { padding: 2px 5px; background: transparent; color: var(--muted); border-color: transparent; }
+.mega-btn.icon:hover { color: var(--ink); }
+.mega-btn.icon.on { color: var(--ok); }
+.mega-btn.icon.danger:hover { color: var(--bad); }
+.mega-btn.roll { background: var(--ink); }
+.mega-btn.danger { border-color: var(--bad); }
+
+/* Limbs table */
+.mega-limbs, .mega-attacks { width: 100%; border-collapse: collapse; margin-top: 4px; }
+.mega-limbs th, .mega-attacks th {
+  font-size: 9px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted);
+  text-align: center; padding: 2px; border-bottom: 1px solid var(--line);
+}
+.mega-limbs td, .mega-attacks td { text-align: center; padding: 2px; border-bottom: 1px solid var(--shade); }
+.mega-limbs td.l-name { text-align: left; min-width: 96px; }
+.mega-limbs td.l-name input[type="text"] { width: 100%; }
+.mega-limbs .l-hp { white-space: nowrap; }
+.mega-limbs .l-hp input { width: 34px; }
+.mega-limbs .l-hp .sep { color: var(--muted); }
+.mega-limbs .l-total { font-weight: 700; }
+.mega-limbs .l-roll { white-space: nowrap; }
+
+/* Attacks + hint */
+.mega-attacks td { text-align: center; }
+.mega-hint, .mega-note, .mega-empty { font-size: 11px; color: var(--muted); margin: 6px 0 0; }
+.mega-hint i, .mega-note i { margin-right: 3px; }
+
+/* Inventory lists */
+.mega-inv-head { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+.mega-list { list-style: none; margin: 2px 0 0; padding: 0; }
+.mega-list li { display: flex; align-items: center; gap: 8px; padding: 3px 2px; border-bottom: 1px solid var(--shade); }
+.mega-list .i-name { font-weight: 600; }
+.mega-list .i-meta { flex: 1; font-size: 10px; color: var(--muted); }
+.mega-list .i-ctrl { display: flex; gap: 2px; }
+
+.mega-notes { width: 100%; }
+
+/* Item sheet */
+.megastructure .mega-sheet.item { font-size: 13px; }
+.mega-item-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.mega-item-img { width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 4px; }
+.mega-item-body { display: flex; flex-direction: column; gap: 8px; }
+.mega-item-body > label { display: flex; flex-direction: column; gap: 2px; font-size: 10px; text-transform: uppercase; color: var(--muted); }
+.mega-item-body input[type="text"], .mega-item-body select, .mega-item-body input[type="number"] { width: 100%; text-align: left; }
+.mega-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mega-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.mega-check { flex-direction: row !important; align-items: center; gap: 6px; }
+.mega-check input { width: auto; }
+
+/* Emergency Sleep (Energy Depletion) badge */
+.mega-sleep { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700;
+  color: #fff; background: var(--bad); padding: 1px 6px; border-radius: 3px; }
+
+/* Hacking state badge */
+.mega-hack-badge { font-size: 9px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700;
+  color: #fff; background: #1f7a45; padding: 1px 6px; border-radius: 3px; }
+
+/* Action economy tracker (2 per turn) */
+.mega-actions-tracker { display: inline-flex; align-items: center; gap: 3px; }
+.mega-actions-label { font-size: 9px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-right: 2px; }
+.mega-actions-val { font-weight: 700; font-size: 15px; min-width: 12px; text-align: center; }
+.mega-actions-val.spent { color: var(--bad); }
+.mega-actions-sep, .mega-actions-max { color: var(--muted); font-size: 12px; }
+
+/* Effective (armor-adjusted) stat chip next to a Limb's base value */
+.mega-limbs td.l-eff { white-space: nowrap; }
+.mega-limbs .eff { display: inline-block; margin-left: 3px; padding: 0 4px; border-radius: 3px;
+  background: var(--ink); color: #fff; font-size: 10px; font-weight: 700; }
+
+/* Survival panel */
+.mega-surv { display: grid; grid-template-columns: 1.2fr 1.4fr .8fr; gap: 10px; }
+.mega-panel { border: 1px solid var(--line); border-radius: 4px; padding: 5px 7px; }
+.mega-panel h3 { margin: 0 0 4px; }
+.mega-quad { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 8px; }
+.mega-quad label { display: flex; flex-direction: column; font-size: 9px; text-transform: uppercase;
+  letter-spacing: .04em; color: var(--muted); gap: 1px; }
+.mega-pen { font-size: 11px; color: var(--bad); font-weight: 700; letter-spacing: 0; text-transform: none; }
+.mega-carry { display: flex; flex-direction: column; gap: 3px; }
+.mega-carry-num { font-weight: 700; font-size: 15px; }
+.mega-carry.over .mega-carry-num { color: var(--bad); }
+.mega-carry-warn { font-size: 10px; color: var(--bad); }
+.mega-armor-sel { font-size: 10px; padding: 1px 3px; }
+.mega-cycle-log { margin: 4px 8px; padding-left: 16px; font-size: 12px; }
+.mega-cycle-log li { margin: 1px 0; }
+
+/* Dialogs */
+.mega-dialog .form-group { display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; }
+.mega-dialog label { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: #555; }
+
+/* Chat cards */
+.mega-card { border: 1px solid #c7c5be; border-radius: 5px; overflow: hidden; font-family: "Helvetica Neue", Arial, sans-serif; }
+.mega-card-head { display: flex; justify-content: space-between; align-items: baseline; background: #16181b; color: #fff; padding: 3px 8px; }
+.mega-card-kind { font-size: 9px; text-transform: uppercase; letter-spacing: .14em; color: #cfcbc2; }
+.mega-card-limb { font-family: "Palatino Linotype", Palatino, Georgia, serif; font-weight: 700; font-size: 13px; }
+.mega-card-sub { padding: 3px 8px 0; font-size: 11px; color: #555; }
+.mega-card-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 5px 8px; }
+.mega-die { display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px;
+  background: #16181b; color: #fff; border-radius: 4px; font-weight: 700; padding: 0 4px; }
+.mega-math { font-size: 12px; }
+.mega-vs { font-size: 11px; color: #555; margin-left: auto; }
+.mega-result { text-align: center; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 3px; font-size: 13px; }
+.mega-result.is-success { background: #e7f3ec; color: #1f7a45; }
+.mega-result.is-failure { background: #f6e9e9; color: #9c2b2b; }
+.mega-dmg { padding: 4px 8px; font-size: 12px; border-top: 1px solid #eee; }
+.mega-dmg em { color: #9c2b2b; }
