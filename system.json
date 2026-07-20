@@ -2,13 +2,13 @@
   "id": "megastructure",
   "title": "The Megastructure",
   "description": "A limb-based tabletop RPG of survival in an infinite, ever-changing structure. Skill and To-Hit rolls resolve on 1d10 plus a Limb's Skill Total.",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "compatibility": {
     "minimum": "13",
     "verified": "13.351"
   },
   "authors": [
-    { "name": "DGS / The Megastructure" }
+    { "name": "sjestro23 / The Megastructure" }
   ],
   "esmodules": ["module/megastructure.mjs"],
   "styles": ["css/megastructure.css"],
@@ -32,5 +32,5 @@
   "primaryTokenAttribute": "",
   "url": "https://github.com/sjestro23/megastructure-foundry",
   "manifest": "https://raw.githubusercontent.com/sjestro23/megastructure-foundry/main/system.json",
-  "download": "https://github.com/sjestro23/megastructure-foundry/releases/download/v0.17.0/megastructure-v0.17.0.zip"
+  "download": "https://github.com/sjestro23/megastructure-foundry/releases/download/v0.18.0/megastructure-v0.18.0.zip"
 }
