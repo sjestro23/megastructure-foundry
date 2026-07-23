@@ -2,7 +2,7 @@
   "id": "megastructure",
   "title": "The Megastructure",
   "description": "A limb-based tabletop RPG of survival in an infinite, ever-changing structure. Skill and To-Hit rolls resolve on 1d10 plus a Limb's Skill Total.",
-  "version": "0.30.0",
+  "version": "0.32.0",
   "compatibility": {
     "minimum": "13",
     "verified": "13.351"
